@@ -1,3 +1,4 @@
+/** Doctor Tracker: Maps typed icon names to accessible, inline SVG drawings. */
 import type { ReactNode } from "react";
 
 export type IconName =
@@ -6,6 +7,7 @@ export type IconName =
   | "logout" | "menu" | "activity" | "hospital" | "arrow-up" | "arrow-right"
   | "filter" | "check";
 
+// Each typed name maps to the SVG geometry used by the shared Icon component.
 const drawings: Record<IconName, ReactNode> = {
   dashboard: <><rect x="3" y="3" width="8" height="8" rx="2" /><rect x="13" y="3" width="8" height="5" rx="2" /><rect x="13" y="10" width="8" height="11" rx="2" /><rect x="3" y="13" width="8" height="8" rx="2" /></>,
   doctor: <><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" /><path d="M4 21a8 8 0 0 1 16 0M19 7v6m-3-3h6" /></>,
@@ -28,6 +30,7 @@ const drawings: Record<IconName, ReactNode> = {
   check: <><path d="m5 12 4 4L19 6" /></>,
 };
 
+/** Render a decorative inline SVG icon with consistent stroke styling. */
 export function Icon({ name, size = 20, strokeWidth = 1.8 }: { name: IconName; size?: number; strokeWidth?: number }) {
   return (
     <svg

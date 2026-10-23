@@ -1,3 +1,4 @@
+/** Doctor Tracker: Provides the shared create and edit form for patient records. */
 "use client";
 
 import { useState, type FormEvent } from "react";
@@ -27,10 +28,12 @@ export function PatientForm({
   const [busy, setBusy] = useState(false);
   const isEditing = Boolean(patient);
 
+  /** Update one field while preserving all other controlled form values. */
   function change(field: keyof typeof values, value: string) {
     setValues((previous) => ({ ...previous, [field]: value }));
   }
 
+  /** Create or update a patient, then return the saved record to the parent view. */
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -44,6 +47,7 @@ export function PatientForm({
     };
 
     try {
+      // Editing uses PATCH; creation is scoped to a doctor profile and uses POST.
       if (patient) {
         const result = await apiRequest<{ patient: Patient }>(`/patients/${patient.id}`, { method: "PATCH", body: JSON.stringify(payload) });
         onSaved(result.patient);

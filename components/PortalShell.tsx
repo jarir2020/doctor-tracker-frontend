@@ -1,3 +1,4 @@
+/** Doctor Tracker: Checks the administrator session and builds the responsive portal navigation. */
 "use client";
 
 import Link from "next/link";
@@ -15,6 +16,7 @@ const navigation = [
   { href: "/patients", label: "Patients", icon: "patient" as const },
 ];
 
+/** Pick the breadcrumb label for the active portal path. */
 function titleForPath(path: string) {
   if (path.startsWith("/doctors/")) return "Doctor profile";
   if (path.startsWith("/doctors")) return "Doctors";
@@ -22,6 +24,7 @@ function titleForPath(path: string) {
   return "Overview";
 }
 
+/** Guard portal content with the admin session and render responsive navigation. */
 export function PortalShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -31,6 +34,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let active = true;
+    // Resolve the session before exposing protected content to the user.
     apiRequest<{ admin: Admin }>("/auth/me")
       .then(({ admin: currentAdmin }) => {
         if (active) setAdmin(currentAdmin);
@@ -44,6 +48,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
     return () => { active = false; };
   }, [router]);
 
+  /** Destroy the server session and return to the sign-in page. */
   async function signOut() {
     try {
       await apiRequest("/auth/logout", { method: "POST" });
@@ -64,6 +69,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
           <p>Opening your workspace…</p>
         </div>
       )}
+      {/* Keep the protected route tree mounted but hidden while auth is unresolved. */}
       <div
         className="portal-shell"
         aria-hidden={waitingForAdmin}

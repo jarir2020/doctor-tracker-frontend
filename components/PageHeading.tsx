@@ -1,5 +1,7 @@
+/** Doctor Tracker: Standardizes the title, description, and optional action for portal pages. */
 import type { ReactNode } from "react";
 
+/** Render the shared page title block with an optional right-side action. */
 export function PageHeading({
   eyebrow,
   title,

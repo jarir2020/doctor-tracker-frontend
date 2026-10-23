@@ -1,3 +1,4 @@
+/** Doctor Tracker: Loads one doctor and manages that doctor’s searchable, filterable patient list. */
 "use client";
 
 import Link from "next/link";
@@ -17,6 +18,7 @@ import type { Doctor, ListData, Patient } from "@/lib/types";
 
 const PAGE_SIZE = 10;
 
+/** Loads one doctor profile and manages its linked patient records. */
 export default function DoctorDetailPage() {
   const { doctorId } = useParams<{ doctorId: string }>();
   const [doctor, setDoctor] = useState<Doctor | null>(null);
@@ -35,6 +37,7 @@ export default function DoctorDetailPage() {
   const [deleteBusy, setDeleteBusy] = useState(false);
   const debouncedSearch = useDebouncedValue(search);
   const query = queryString({ q: debouncedSearch, from, to, page, limit: PAGE_SIZE });
+  // Include refresh in the request identity so saves and deletes trigger a reload.
   const queryKey = `${doctorId}?${query}&refresh=${refresh}`;
   const loading = loadedQuery !== queryKey;
 
@@ -52,9 +55,11 @@ export default function DoctorDetailPage() {
       })
       .catch((err) => { if (active) setError(err instanceof ApiError ? err.message : "Doctor details could not be loaded."); })
       .finally(() => { if (active) setLoadedQuery(queryKey); });
+    // Prevent an older query from replacing results for the latest filters.
     return () => { active = false; };
   }, [doctorId, query, queryKey]);
 
+  /** Delete the selected linked patient and refresh the list on success. */
   async function confirmDelete() {
     if (!deleting) return;
     setDeleteBusy(true);

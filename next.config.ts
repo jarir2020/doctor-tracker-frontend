@@ -1,3 +1,4 @@
+/** Doctor Tracker: Configures Next.js component caching, CSS handling, and API proxy rewrites. */
 import type { NextConfig } from "next";
 
 const backendOrigin = (process.env.BACKEND_API_ORIGIN || "http://localhost:4000").replace(/\/+$/, "");

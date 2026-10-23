@@ -1,6 +1,8 @@
+/** Doctor Tracker: Defines the application design tokens, layout, components, and responsive styles. */
 @import "tailwindcss";
 
 :root {
+  /* Shared colors and shadow used by the portal and its controls. */
   color-scheme: light;
   --canvas: #f5f7fa;
   --surface: #ffffff;
@@ -41,6 +43,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .portal-shell { min-height: 100vh; }
+/* Persistent navigation and the shared page frame. */
 .sidebar {
   width: 246px;
   height: 100vh;
@@ -114,6 +117,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .portal-footer span:first-child { font-weight: 700; letter-spacing: .2px; }
 .mobile-scrim { display: none; }
 
+/* Reusable headings, actions, summary cards, and dashboard charts. */
 .eyebrow { margin-bottom: 8px; color: #8392a4; font-size: 9px; font-weight: 750; letter-spacing: 1.3px; }
 .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 27px; }
 .page-heading h1 { margin: 0; color: #1b2b3e; font-size: clamp(25px, 3vw, 31px); line-height: 1.16; letter-spacing: -1.1px; font-weight: 690; }
@@ -172,6 +176,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .dashboard-footnote { display: flex; align-items: center; gap: 8px; margin-top: 18px; padding: 12px 14px; border: 1px solid #e7f1ed; border-radius: 9px; background: #f7fbf9; color: #6d8c80; font-size: 10px; }
 .dashboard-footnote svg { color: #38a98b; flex: 0 0 auto; }
 
+/* Directory filters, record tables, pagination, and empty/loading states. */
 .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin: -4px 0 15px; }
 .search-box { min-width: 220px; width: min(100%, 300px); height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 11px; border: 1px solid var(--line-strong); border-radius: 8px; background: white; color: #8996a4; }
 .search-box:focus-within { border-color: #91a7f1; box-shadow: 0 0 0 3px rgba(84,119,232,.1); }
@@ -223,6 +228,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .loading-row { height: 54px; margin: 0 17px; border-bottom: 1px solid #f0f2f5; background: linear-gradient(90deg, #fff, #f8fafc, #fff); background-size: 200% 100%; animation: shimmer 1.3s infinite; }
 .record-meta { display: flex; align-items: center; gap: 8px; color: #98a4b0; font-size: 10px; }
 .record-meta strong { color: #5c6e82; font-weight: 650; }
+/* Doctor detail summary and modal-based create/edit forms. */
 .back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; color: #7a8a9a; font-size: 10px; font-weight: 620; }
 .back-link:hover { color: var(--blue-dark); }
 .detail-hero { display: flex; align-items: center; gap: 15px; margin-bottom: 22px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(120deg, #fff, #f9fbff); }
@@ -256,6 +262,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .form-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eff2f5; }
 .confirm-copy { margin: 0; color: #728194; font-size: 11px; line-height: 1.6; }
 
+/* Standalone sign-in screen, including the compact loading state. */
 .login-screen { min-height: 100vh; display: grid; grid-template-columns: minmax(350px, .87fr) minmax(450px, 1.13fr); background: #f6f8fb; }
 .login-art { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; padding: 34px 42px; color: #edf3f9; background: #14273e; }
 .login-art::before, .login-art::after { content: ""; position: absolute; border: 1px solid rgba(176,199,242,.14); border-radius: 50%; pointer-events: none; }
@@ -289,12 +296,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .boot-screen p { margin: 13px 0 0; color: #8896a5; font-size: 10px; }
 .loading-dot { width: 18px; height: 18px; border: 2px solid #dfe6f3; border-top-color: #5978df; border-radius: 50%; animation: spin .8s linear infinite; }
 
+/* Small entrance and loading effects used throughout the interface. */
 @keyframes rise-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 @keyframes bar-grow { from { transform: scaleX(.05); transform-origin: left; } to { transform: scaleX(1); transform-origin: left; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* Stack and shrink layouts as the viewport narrows. */
 @media (max-width: 1100px) {
   .page-content { padding-left: 26px; padding-right: 26px; }
   .topbar { padding: 0 26px; }

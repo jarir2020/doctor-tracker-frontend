@@ -1,3 +1,4 @@
+/** Doctor Tracker: Displays the doctor directory with search, filters, pagination, and doctor creation. */
 "use client";
 
 import Link from "next/link";
@@ -15,6 +16,7 @@ import type { Doctor, ListData } from "@/lib/types";
 
 const PAGE_SIZE = 10;
 
+/** Loads and filters the provider directory, with a modal for creating doctors. */
 export default function DoctorsPage() {
   const [search, setSearch] = useState("");
   const [specialization, setSpecialization] = useState("");
@@ -29,6 +31,7 @@ export default function DoctorsPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const debouncedSearch = useDebouncedValue(search);
   const query = queryString({ q: debouncedSearch, specialization, from, to, page, limit: PAGE_SIZE });
+  // Refresh is part of the key so creating a doctor reloads the current directory.
   const queryKey = `${query}&refresh=${refresh}`;
   const loading = loadedQuery !== queryKey;
 
@@ -38,6 +41,7 @@ export default function DoctorsPage() {
       .then((result) => { if (active) { setData(result); setError(""); } })
       .catch((err) => { if (active) setError(err instanceof ApiError ? err.message : "Doctor records could not be loaded."); })
       .finally(() => { if (active) setLoadedQuery(queryKey); });
+    // Ignore results from a superseded search or a page that has unmounted.
     return () => { active = false; };
   }, [query, queryKey]);
 
@@ -50,6 +54,7 @@ export default function DoctorsPage() {
   }, []);
 
   const hasFilters = Boolean(search || specialization || from || to);
+  /** Clear all list filters and return to the first page. */
   function resetFilters() {
     setSearch(""); setSpecialization(""); setFrom(""); setTo(""); setPage(1);
   }

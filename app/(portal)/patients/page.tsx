@@ -1,3 +1,4 @@
+/** Doctor Tracker: Displays the patient directory and handles filtering, editing, and deletion. */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ import type { ListData, Patient } from "@/lib/types";
 
 const PAGE_SIZE = 10;
 
+/** Loads, filters, and manages patient records across the practice. */
 export default function PatientsPage() {
   const [search, setSearch] = useState("");
   const [condition, setCondition] = useState("");
@@ -31,6 +33,7 @@ export default function PatientsPage() {
   const [deleteBusy, setDeleteBusy] = useState(false);
   const debouncedSearch = useDebouncedValue(search);
   const query = queryString({ q: debouncedSearch, condition, from, to, page, limit: PAGE_SIZE });
+  // Changing this key after a mutation causes the current list to be fetched again.
   const queryKey = `${query}&refresh=${refresh}`;
   const loading = loadedQuery !== queryKey;
 
@@ -48,9 +51,11 @@ export default function PatientsPage() {
       })
       .catch((err) => { if (active) setError(err instanceof ApiError ? err.message : "Patient records could not be loaded."); })
       .finally(() => { if (active) setLoadedQuery(queryKey); });
+    // Ignore results from an outdated filter set or an unmounted page.
     return () => { active = false; };
   }, [query, queryKey]);
 
+  /** Delete the selected record and trigger a refresh after success. */
   async function confirmDelete() {
     if (!deleting) return;
     setDeleteBusy(true);
@@ -67,6 +72,7 @@ export default function PatientsPage() {
   }
 
   const hasFilters = Boolean(search || condition || from || to);
+  /** Clear all filters together and return to the first result page. */
   function resetFilters() {
     setSearch(""); setCondition(""); setFrom(""); setTo(""); setPage(1);
   }

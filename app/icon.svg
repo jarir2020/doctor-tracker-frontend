@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- DoctorTrack favicon: a white D mark on the product's blue brand tile. -->
   <rect width="64" height="64" rx="18" fill="#5477e8" />
   <path d="M18 17h14c12 0 19 7 19 15.5S44 48 32 48H18V17Zm11 8v15h3c5.7 0 9-2.7 9-7.5S37.7 25 32 25h-3Z" fill="#fff" />
 </svg>

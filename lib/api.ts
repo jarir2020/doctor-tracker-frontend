@@ -1,8 +1,10 @@
+/** Doctor Tracker: Centralizes credentialed API requests, response errors, and query-string encoding. */
 const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "/api").replace(/\/+$/, "");
 
 export class ApiError extends Error {
   status: number;
 
+  /** Preserve the HTTP status with a user-facing request error. */
   constructor(message: string, status: number) {
     super(message);
     this.name = "ApiError";
@@ -10,14 +12,17 @@ export class ApiError extends Error {
   }
 }
 
+/** Make a cookie-authenticated request and unwrap the API's success envelope. */
 export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers);
+  // JSON forms get a content type automatically; multipart callers keep their boundary.
   if (options.body && !(options.body instanceof FormData) && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
 
   let response: Response;
   try {
+    // Cookies carry the server-side administrator session across the API proxy.
     response = await fetch(`${API_BASE}${path.startsWith("/") ? path : `/${path}`}`, {
       ...options,
       headers,
@@ -41,6 +46,7 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}): Pr
   return payload.data as T;
 }
 
+/** Serialize defined, nonempty filter values for a URL query. */
 export function queryString(values: Record<string, string | number | undefined>) {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(values)) {

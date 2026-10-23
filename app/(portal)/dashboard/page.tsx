@@ -1,3 +1,4 @@
+/** Doctor Tracker: Loads the practice summary and presents totals, monthly activity, and patient distribution. */
 "use client";
 
 import Link from "next/link";
@@ -10,6 +11,7 @@ import { apiRequest, ApiError } from "@/lib/api";
 import { formatNumber } from "@/lib/format";
 import type { DashboardSummary } from "@/lib/types";
 
+/** Fetches practice metrics and composes the dashboard summary cards and charts. */
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [loading, setLoading] = useState(true);
@@ -21,9 +23,11 @@ export default function DashboardPage() {
       .then((data) => { if (active) setSummary(data); })
       .catch((err) => { if (active) setError(err instanceof ApiError ? err.message : "Dashboard data could not be loaded."); })
       .finally(() => { if (active) setLoading(false); });
+    // Ignore late responses after the dashboard has unmounted.
     return () => { active = false; };
   }, []);
 
+  // The final bucket represents the current month in the six-month chart.
   const monthlyActivity = summary?.monthlyActivity || [];
   const lastMonth = monthlyActivity[monthlyActivity.length - 1];
   return (

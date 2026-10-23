@@ -1,3 +1,4 @@
+/** Doctor Tracker: Defines the frontend shapes shared by API responses and UI components. */
 export type Admin = {
   id: string;
   name: string;

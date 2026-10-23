@@ -1,6 +1,8 @@
+/** Doctor Tracker: Displays one labeled practice metric with its icon and visual tone. */
 import { Icon } from "./Icon";
 import type { IconName } from "./Icon";
 
+/** Display one dashboard total with its note, icon, and color treatment. */
 export function StatCard({
   label,
   value,

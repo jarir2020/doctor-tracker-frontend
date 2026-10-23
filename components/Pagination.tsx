@@ -1,8 +1,10 @@
+/** Doctor Tracker: Shows the current record range and controls page changes. */
 "use client";
 
 import { Icon } from "./Icon";
 import type { PaginationData } from "@/lib/types";
 
+/** Hide when the data fits on one page; otherwise provide range and navigation. */
 export function Pagination({ value, onChange }: { value: PaginationData | null; onChange: (page: number) => void }) {
   if (!value || value.total <= value.limit) return null;
   const pages = Math.max(value.totalPages, 1);

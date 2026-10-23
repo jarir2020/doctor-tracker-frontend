@@ -1,8 +1,10 @@
+/** Doctor Tracker: Renders an accessible dialog and manages Escape and background scrolling. */
 "use client";
 
 import { useEffect, type ReactNode } from "react";
 import { Icon } from "./Icon";
 
+/** Show dialog content and close it with Escape, the close button, or backdrop. */
 export function Modal({
   open,
   title,
@@ -16,6 +18,7 @@ export function Modal({
 }) {
   useEffect(() => {
     if (!open) return;
+    // Keep keyboard dismissal and page scroll behavior consistent for every dialog.
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
     };

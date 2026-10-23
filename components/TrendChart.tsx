@@ -1,5 +1,7 @@
+/** Doctor Tracker: Draws SVG activity trends and patient counts by doctor. */
 import type { DashboardSummary } from "@/lib/types";
 
+/** Plot doctor and patient registrations against a shared six-month scale. */
 export function TrendChart({ data }: { data: DashboardSummary["monthlyActivity"] }) {
   const width = 680;
   const height = 214;
@@ -7,6 +9,7 @@ export function TrendChart({ data }: { data: DashboardSummary["monthlyActivity"]
   const right = width - 14;
   const top = 18;
   const bottom = 170;
+  // Use one shared scale so the two series remain directly comparable.
   const max = Math.max(4, ...data.flatMap((item) => [item.patients, item.doctors]));
   const xFor = (index: number) => left + (data.length <= 1 ? 0 : index * (right - left) / (data.length - 1));
   const yFor = (value: number) => bottom - value / max * (bottom - top);
@@ -35,6 +38,7 @@ export function TrendChart({ data }: { data: DashboardSummary["monthlyActivity"]
   );
 }
 
+/** Compare patient totals per doctor using widths relative to the largest count. */
 export function DoctorBars({ data }: { data: DashboardSummary["patientsPerDoctor"] }) {
   const max = Math.max(1, ...data.map((item) => item.patients));
   if (!data.length) return <div className="chart-empty">Add a doctor and patient to see care distribution.</div>;

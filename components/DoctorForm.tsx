@@ -1,3 +1,4 @@
+/** Doctor Tracker: Provides the controlled form used to create doctor records. */
 "use client";
 
 import { useState, type FormEvent } from "react";
@@ -10,12 +11,15 @@ export function DoctorForm({ onSaved, onCancel }: { onSaved: (doctor: Doctor) =>
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
+  /** Update one controlled field without replacing the rest of the form state. */
   function change(field: keyof typeof values, value: string) {
     setValues((previous) => ({ ...previous, [field]: value }));
   }
 
+  /** Create a doctor through the API and report the saved record to the parent. */
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // Reset the previous error and mark the request as in flight.
     setError("");
     setBusy(true);
     try {

@@ -1,3 +1,4 @@
+/** Doctor Tracker: Composes the Next.js ESLint presets and ignores generated build output. */
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";

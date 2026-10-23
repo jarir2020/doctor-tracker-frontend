@@ -1,8 +1,10 @@
+/** Doctor Tracker: Renders patient rows and exposes edit, delete, and doctor navigation actions. */
 import Link from "next/link";
 import { formatDate, initials } from "@/lib/format";
 import type { Patient } from "@/lib/types";
 import { Icon } from "./Icon";
 
+/** Render patient details and delegate row actions to the containing page. */
 export function PatientTable({
   patients,
   hideDoctor = false,

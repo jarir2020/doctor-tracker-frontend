@@ -1,3 +1,4 @@
+/** Doctor Tracker: Collects administrator credentials and starts the authenticated session. */
 "use client";
 
 import { useState, type FormEvent } from "react";
@@ -5,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { apiRequest, ApiError } from "@/lib/api";
 import { Icon } from "@/components/Icon";
 
+/** Submits administrator credentials and redirects after a session is created. */
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -12,6 +14,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
+  /** Send the login request and keep API failures visible in the form. */
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
