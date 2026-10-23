@@ -28,7 +28,7 @@ Browser (same-origin /api) --> Next.js URL rewrite --> Express REST API --Mongoo
 
 The browser uses the same-origin `/api` path. A Next.js external rewrite forwards those requests to the standalone Express API, so the browser session cookie remains first-party. Set `BACKEND_API_ORIGIN` for the rewrite target and `NEXT_PUBLIC_API_BASE_URL=/api` for the browser client. The Express server authenticates administrators, validates requests, applies filters and pagination, and performs dashboard aggregations. Patient documents reference a doctor. The browser never connects directly to MongoDB.
 
-The frontend and backend are separate applications and separate GitHub repositories. The frontend is deployed to Vercel; the API is deployed as a Render Web Service; MongoDB Atlas stores the demo data.
+The frontend and backend are separate applications and separate GitHub repositories. Each is deployed as its own Vercel project; MongoDB Atlas stores the demo data.
 
 ## Local setup
 
@@ -74,17 +74,21 @@ Screenshots below show the responsive UI with synthetic sample records from a lo
 
 ## Deployment
 
-1. Deploy the backend repository to Render from its `render.yaml` Blueprint. Set its Atlas connection and demo administrator environment values, then obtain the Render service origin.
-2. Import this repository into Vercel as a Next.js project, using the repository root as the project root and `main` as the production branch. Git-connected Vercel projects can deploy production from the production branch and preview deployments from other branches ([Vercel Git deployments](https://vercel.com/docs/git)).
-3. Set these Vercel environment variables for Production, then redeploy:
+Deploy both repositories as separate Vercel projects: this repository as the Next.js frontend and the backend repository as the Express API. Vercel supports Express directly as a Function, including the backend's `src/server.js` entry point and `app.listen` pattern ([Express on Vercel](https://vercel.com/docs/frameworks/backend/express)).
+
+1. Import the backend repository into Vercel first, using its repository root and `main` branch. Set `MONGODB_URI`, `SESSION_SECRET`, `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production` in the backend project's Production environment. Set `FRONTEND_ORIGINS` after the frontend URL is assigned.
+2. Import this repository into Vercel as a Next.js project, using its repository root and `main` as the production branch. Git-connected Vercel projects can deploy from the selected production branch ([Vercel Git deployments](https://vercel.com/docs/git)). Set these Production environment variables:
 
    ```env
    NEXT_PUBLIC_API_BASE_URL=/api
-   BACKEND_API_ORIGIN=https://<your-render-service>.onrender.com
+   BACKEND_API_ORIGIN=https://<your-backend-project>.vercel.app
    ```
 
-4. Copy the assigned Vercel production origin (for example, `https://<your-project>.vercel.app`) into the Render `FRONTEND_ORIGINS` setting, without a trailing slash, and redeploy the API. The Next.js rewrite keeps browser requests on the frontend origin while forwarding them to the API.
-5. Check `https://<your-render-service>.onrender.com/api/health`, then sign in and verify the doctor and patient workflows through the deployed frontend.
+3. Copy the assigned frontend production origin (for example, `https://<your-frontend-project>.vercel.app`) into the backend project's `FRONTEND_ORIGINS` setting, without a trailing slash, then redeploy the backend. The Next.js rewrite keeps browser requests on the frontend origin while forwarding them to the API.
+4. Seed the demo administrator against the Atlas database from a trusted local checkout by running `npm run seed:admin` in `backend/` with the same values in its ignored `.env` file.
+5. Check `https://<your-backend-project>.vercel.app/api/health`, then sign in and verify the doctor and patient workflows through the frontend.
+
+The Atlas IP access list must permit the backend's Vercel outbound connections. Vercel Hobby uses dynamic egress IPs; stable egress IPs require a paid Static IP feature. For a disposable demo, Atlas can temporarily allow connections from any IP, but pair that with a unique database password and remove the broad rule when it is no longer needed ([Vercel outbound IP guidance](https://vercel.com/kb/guide/can-i-get-a-fixed-ip-address), [MongoDB Atlas connectivity troubleshooting](https://www.mongodb.com/docs/manual/troubleshooting/server-selection-timeout/)).
 
 ### Submission links
 
