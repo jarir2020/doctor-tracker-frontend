@@ -23,10 +23,10 @@ This repository contains the **Next.js frontend only**. The standalone API is ma
 ## System architecture and data flow
 
 ```text
-Browser (same-origin /api) --> Next.js URL rewrite --> Express REST API --Mongoose--> MongoDB Atlas
+Browser (same-origin /api) --> Next.js API proxy --> Express REST API --Mongoose--> MongoDB Atlas
 ```
 
-The browser uses the same-origin `/api` path. A Next.js external rewrite forwards those requests to the standalone Express API, so the browser session cookie remains first-party. Set `BACKEND_API_ORIGIN` for the rewrite target and `NEXT_PUBLIC_API_BASE_URL=/api` for the browser client. The Express server authenticates administrators, validates requests, applies filters and pagination, and performs dashboard aggregations. Patient documents reference a doctor. The browser never connects directly to MongoDB.
+The browser uses the same-origin `/api` path. A Next.js Route Handler forwards those requests to the standalone Express API and explicitly passes the administrator cookie in both directions, keeping the session first-party in the browser. Set `BACKEND_API_ORIGIN` to the backend's origin. The Express server authenticates administrators, validates requests, applies filters and pagination, and performs dashboard aggregations. Patient documents reference a doctor. The browser never connects directly to MongoDB.
 
 The frontend and backend are separate applications and separate GitHub repositories. Each is deployed as its own Vercel project; MongoDB Atlas stores the demo data.
 
@@ -36,10 +36,9 @@ Requirements: Node.js 22 or newer, npm, and a running MongoDB instance or MongoD
 
 1. Clone this frontend repository and the [backend repository](https://github.com/jarir2020/doctor-tracker-backend) into sibling folders.
 2. In `backend/`, copy `.env.example` to `.env`; set `MONGODB_URI`, `SESSION_SECRET`, `ADMIN_EMAIL`, and an `ADMIN_PASSWORD` with at least 12 characters. Follow the backend README to install packages and seed the administrator.
-3. In this repository, copy `.env.example` to `.env.local`; the local rewrite target points to the Express API on port 4000:
+3. In this repository, copy `.env.example` to `.env.local`; the local API proxy points to the Express API on port 4000:
 
    ```env
-NEXT_PUBLIC_API_BASE_URL=/api
 BACKEND_API_ORIGIN=http://localhost:4000
    ```
 
@@ -62,7 +61,7 @@ The assignment requires a separate Next.js client and standalone Express server.
 
 ### 2. Use server-managed admin sessions
 
-The API stores the session on the server in MongoDB and sends the browser an `HttpOnly`, `Secure` session cookie. This avoids keeping an API token in JavaScript-readable browser storage and lets logout invalidate the server-side session. A same-origin `/api` rewrite forwards requests to Express, avoiding third-party-cookie dependence while the backend still checks the allowed frontend origin.
+The API stores the session on the server in MongoDB and sends the browser an `HttpOnly`, `Secure` session cookie. This avoids keeping an API token in JavaScript-readable browser storage and lets logout invalidate the server-side session. The same-origin `/api` proxy forwards the session cookie to Express and returns updated cookies to the browser while the backend still checks the allowed frontend origin.
 
 ## Screenshots
 
@@ -84,14 +83,13 @@ Current production deployments:
 Both URLs currently require Vercel authentication. Public evaluator access and GitHub push-to-deploy are pending Vercel account settings: the team has enabled Vercel Authentication, and its GitHub Login Connection must be added before Vercel can link these repositories.
 
 1. Import the backend repository into Vercel first, using its repository root and `main` branch. Set `MONGODB_URI`, `SESSION_SECRET`, `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production` in the backend project's Production environment. Set `FRONTEND_ORIGINS` after the frontend URL is assigned.
-2. Import this repository into Vercel as a Next.js project, using its repository root and `main` as the production branch. Git-connected Vercel projects can deploy from the selected production branch ([Vercel Git deployments](https://vercel.com/docs/git)). Set these Production environment variables:
+2. Import this repository into Vercel as a Next.js project, using its repository root and `main` as the production branch. Git-connected Vercel projects can deploy from the selected production branch ([Vercel Git deployments](https://vercel.com/docs/git)). Set this Production environment variable:
 
    ```env
-   NEXT_PUBLIC_API_BASE_URL=/api
    BACKEND_API_ORIGIN=https://<your-backend-project>.vercel.app
    ```
 
-3. Copy the assigned frontend production origin (for example, `https://<your-frontend-project>.vercel.app`) into the backend project's `FRONTEND_ORIGINS` setting, without a trailing slash, then redeploy the backend. The Next.js rewrite keeps browser requests on the frontend origin while forwarding them to the API.
+3. Copy the assigned frontend production origin (for example, `https://<your-frontend-project>.vercel.app`) into the backend project's `FRONTEND_ORIGINS` setting, without a trailing slash, then redeploy the backend. The Next.js API proxy keeps browser requests on the frontend origin while forwarding them to the API.
 4. Seed the demo administrator against the Atlas database from a trusted local checkout by running `npm run seed:admin` in `backend/` with the same values in its ignored `.env` file.
 5. Check `https://<your-backend-project>.vercel.app/api/health`, then sign in and verify the doctor and patient workflows through the frontend.
 

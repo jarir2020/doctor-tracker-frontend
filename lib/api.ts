@@ -1,5 +1,6 @@
 /** Doctor Tracker: Centralizes credentialed API requests, response errors, and query-string encoding. */
-const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "/api").replace(/\/+$/, "");
+// Keep browser API calls on the frontend origin so the administrator session stays first-party.
+const API_BASE = "/api";
 
 export class ApiError extends Error {
   status: number;
