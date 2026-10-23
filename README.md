@@ -8,8 +8,8 @@ This repository contains the **Next.js frontend only**. The standalone API is ma
 
 - Frontend repository: [doctor-tracker-frontend](https://github.com/jarir2020/doctor-tracker-frontend)
 - Backend repository: [doctor-tracker-backend](https://github.com/jarir2020/doctor-tracker-backend)
-- Live frontend: Pending deployment
-- Live backend API: Pending deployment
+- Vercel frontend production URL (currently Vercel-authenticated): https://doctor-tracker-frontend-eta.vercel.app
+- Vercel backend API production URL (currently Vercel-authenticated): https://doctor-tracker-backend-woad.vercel.app
 
 ## Features
 
@@ -74,7 +74,14 @@ Screenshots below show the responsive UI with synthetic sample records from a lo
 
 ## Deployment
 
-Deploy both repositories as separate Vercel projects: this repository as the Next.js frontend and the backend repository as the Express API. Vercel supports Express directly as a Function, including the backend's `src/server.js` entry point and `app.listen` pattern ([Express on Vercel](https://vercel.com/docs/frameworks/backend/express)).
+Deploy both repositories as separate Vercel projects: this repository as the Next.js frontend and the backend repository as the Express API. Vercel loads the backend's `src/app.js` as its Express Function entry point; the local `src/server.js` starts Express with `app.listen` ([Express on Vercel](https://vercel.com/docs/frameworks/backend/express)).
+
+Current production deployments:
+
+- Frontend: https://doctor-tracker-frontend-eta.vercel.app
+- Backend API: https://doctor-tracker-backend-woad.vercel.app
+
+Both URLs currently require Vercel authentication. Public evaluator access and GitHub push-to-deploy are pending Vercel account settings: the team has enabled Vercel Authentication, and its GitHub Login Connection must be added before Vercel can link these repositories.
 
 1. Import the backend repository into Vercel first, using its repository root and `main` branch. Set `MONGODB_URI`, `SESSION_SECRET`, `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production` in the backend project's Production environment. Set `FRONTEND_ORIGINS` after the frontend URL is assigned.
 2. Import this repository into Vercel as a Next.js project, using its repository root and `main` as the production branch. Git-connected Vercel projects can deploy from the selected production branch ([Vercel Git deployments](https://vercel.com/docs/git)). Set these Production environment variables:
@@ -94,7 +101,7 @@ The Atlas IP access list must permit the backend's Vercel outbound connections. 
 
 - Frontend GitHub repository: https://github.com/jarir2020/doctor-tracker-frontend
 - Backend GitHub repository: https://github.com/jarir2020/doctor-tracker-backend
-- Live frontend website: **Pending deployment**
-- Live backend API: **Pending deployment**
+- Live frontend website: https://doctor-tracker-frontend-eta.vercel.app (currently requires Vercel authentication)
+- Live backend API: https://doctor-tracker-backend-woad.vercel.app (currently requires Vercel authentication)
 
 For evaluation, use synthetic patient records only. Do not add secrets or real patient information to either repository.
