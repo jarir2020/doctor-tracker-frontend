@@ -74,9 +74,23 @@ Screenshots below show the responsive UI with synthetic sample records from a lo
 
 ## Deployment
 
-1. Import this repository as a Vercel project.
-2. Set `NEXT_PUBLIC_API_BASE_URL=/api` and `BACKEND_API_ORIGIN` to the deployed Render API origin (for example, `https://doctor-tracker-api.onrender.com`).
-3. Set the deployed frontend origin in the backend's `FRONTEND_ORIGINS` environment variable.
-4. Confirm the API health endpoint at `/api/health` and sign in through the frontend.
+1. Deploy the backend repository to Render from its `render.yaml` Blueprint. Set its Atlas connection and demo administrator environment values, then obtain the Render service origin.
+2. Import this repository into Vercel as a Next.js project, using the repository root as the project root and `main` as the production branch. Git-connected Vercel projects can deploy production from the production branch and preview deployments from other branches ([Vercel Git deployments](https://vercel.com/docs/git)).
+3. Set these Vercel environment variables for Production, then redeploy:
+
+   ```env
+   NEXT_PUBLIC_API_BASE_URL=/api
+   BACKEND_API_ORIGIN=https://<your-render-service>.onrender.com
+   ```
+
+4. Copy the assigned Vercel production origin (for example, `https://<your-project>.vercel.app`) into the Render `FRONTEND_ORIGINS` setting, without a trailing slash, and redeploy the API. The Next.js rewrite keeps browser requests on the frontend origin while forwarding them to the API.
+5. Check `https://<your-render-service>.onrender.com/api/health`, then sign in and verify the doctor and patient workflows through the deployed frontend.
+
+### Submission links
+
+- Frontend GitHub repository: https://github.com/jarir2020/doctor-tracker-frontend
+- Backend GitHub repository: https://github.com/jarir2020/doctor-tracker-backend
+- Live frontend website: **Pending deployment**
+- Live backend API: **Pending deployment**
 
 For evaluation, use synthetic patient records only. Do not add secrets or real patient information to either repository.
