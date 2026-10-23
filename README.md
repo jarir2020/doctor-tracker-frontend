@@ -8,8 +8,8 @@ This repository contains the **Next.js frontend only**. The standalone API is ma
 
 - Frontend repository: [doctor-tracker-frontend](https://github.com/jarir2020/doctor-tracker-frontend)
 - Backend repository: [doctor-tracker-backend](https://github.com/jarir2020/doctor-tracker-backend)
-- Vercel frontend production URL (currently Vercel-authenticated): https://doctor-tracker-frontend-eta.vercel.app
-- Vercel backend API production URL (currently Vercel-authenticated): https://doctor-tracker-backend-woad.vercel.app
+- Vercel frontend production URL (public): https://doctor-tracker-frontend-eta.vercel.app
+- Vercel backend API production URL (public): https://doctor-tracker-backend-woad.vercel.app
 
 ## Features
 
@@ -101,7 +101,7 @@ The Atlas IP access list must permit the backend's Vercel outbound connections. 
 
 - Frontend GitHub repository: https://github.com/jarir2020/doctor-tracker-frontend
 - Backend GitHub repository: https://github.com/jarir2020/doctor-tracker-backend
-- Live frontend website: https://doctor-tracker-frontend-eta.vercel.app (currently requires Vercel authentication)
-- Live backend API: https://doctor-tracker-backend-woad.vercel.app (currently requires Vercel authentication)
+- Live frontend website: https://doctor-tracker-frontend-eta.vercel.app
+- Live backend API: https://doctor-tracker-backend-woad.vercel.app
 
 For evaluation, use synthetic patient records only. Do not add secrets or real patient information to either repository.
